@@ -1,30 +1,31 @@
-# from typing import Union
-
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 from santaRepository import santaRepository
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates")
+
 class Item(BaseModel):
     name: str
     price: float
     is_offer: bool | None = None
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+@app.get("/", response_class=HTMLResponse)
+def read_root(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="index.html"
+    )
 
-
-@app.get("/santalist/{exchange}")
-def get_santas(exchange: str):
-    return santaRepository(exchange).getSantas(exchange)
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, b: str | None = None):
-    return {"item_id": item_id, "q": b}
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_price": item.price, "item_id": item_id}
+@app.get("/santalist/{exchange}", response_class=HTMLResponse)
+def get_santas(request: Request, exchange: str):
+    santaList = santaRepository(exchange).getSantas(exchange)
+    return templates.TemplateResponse(
+        request=request, name="santas.html", context={"santaList": santaList}
+    )
