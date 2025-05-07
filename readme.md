@@ -25,6 +25,7 @@ erDiagram
         int id PK
         int exchangeID FK "not null"
         int santaID FK "not null"
+        bool isAdmin
     }
 
     SANTARESTRICTION {

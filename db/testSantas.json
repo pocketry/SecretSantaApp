@@ -1,0 +1,50 @@
+{
+    "exchange":
+        {
+            "name": "testExchange"
+        },    
+    "santas":
+        [
+            {
+                "name": "Frodo",
+                "email": "frodo@example.com"
+            },
+            {
+                "name": "Sam",
+                "email": "sam@example.com"
+            },
+            {
+                "name": "Merry",
+                "email": "merry@example.com"
+            },
+            {
+                "name": "Pippin",
+                "email": "pippin@example.com"
+            },
+            {
+                "name": "Gandalf",
+                "email": "gandalf@example.com"
+            },
+            {
+                "name": "Aragorn",
+                "email": "aragorn@example.com"
+            },
+            {
+                "name": "Legolas",
+                "email": "legolas@example.com"
+            },
+            {
+                "name": "Gimli",
+                "email": "gimli@example.com"
+            },
+            {
+                "name": "Boromir",
+                "email": "boromir@example.com"
+            }
+        ],
+    "santarestriction":
+        {
+            "santa1": "frodo@example.com",
+            "santa2": "sam@example.com"
+        }
+}

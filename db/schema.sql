@@ -20,6 +20,7 @@ CREATE TABLE santa_exchange_participation (
     id INTEGER PRIMARY KEY,
     exchangeID INTEGER NOT NULL,
     santaID INTEGER NOT NULL,
+    isAdmin BOOLEAN,
     FOREIGN KEY (exchangeID) REFERENCES exchange(id),
     FOREIGN KEY (santaID) REFERENCES santa(id)
 );
