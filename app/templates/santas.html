@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+{% block main %}
+<section class="list-section">
+    <div class="list-header">Santas</div>
+    <ul class="item-list">
+      {% for s in santaList %}
+      <li>{{ s.name }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endblock main %}
