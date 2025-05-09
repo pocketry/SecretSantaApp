@@ -8,12 +8,13 @@ from app.santaRepository import santaRepository
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory="./static"), name="static")
 
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory="./templates")
 
 @app.get("/", response_class=HTMLResponse)
-def read_root(request: Request):
+def get_exchanges(request: Request):
+    
     return templates.TemplateResponse(
         request=request, name="index.html"
     )

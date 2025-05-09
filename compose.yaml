@@ -1,0 +1,26 @@
+name: secretSanta
+
+services:
+  init-db:
+    build: .
+    container_name: init-db
+    command: python app/db/initdb.py
+    volumes:
+      - sqlite_data:/data
+    restart: "no"
+
+  fastapi-app:
+    build: .
+    container_name: fastapi-app
+    depends_on:
+      - init-db
+    ports:
+      - "8000:80"
+    volumes:
+      - sqlite_data:/data
+    command: fastapi run app/main.py --host 0.0.0.0 --port 80
+    environment:
+      - PYTHONUNBUFFERED=1
+
+volumes:
+  sqlite_data:
