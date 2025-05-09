@@ -2,19 +2,22 @@ A python scirpt that uses classes and csv files to create a secret santa exchang
 
 ### Development
 
+To seed your local database, run app/db/initdb.py
+
 To start the server
 `fastapi dev main.py`
+
 
 #### Schema Diagram
 
 ```mermaid
 erDiagram
-    EXCHANGE {
+    EXCHANGES {
         int id PK
         string name "not null"
     }
 
-    SANTA {
+    SANTAS {
         int id PK
         string name "not null"
         string email "not null, unique"
@@ -28,19 +31,19 @@ erDiagram
         bool isAdmin
     }
 
-    SANTARESTRICTION {
+    SANTARESTRICTIONS {
         int id PK "these santas won't be assigned each other"
         int santa1ID FK "not null, CHECK (santa1ID < santa2ID), UNIQUE(santa1ID, santa2ID)"
         int santa2ID FK "not null"
     }
 
-    EXCHANGERUN {
+    EXCHANGERUNS {
         int id PK
         int exchangeID FK "not null"
         datetime createdAt "not null"
     }
 
-    EXCHANGEASSIGNMENT {
+    EXCHANGEASSIGNMENTS {
         int id PK
         int exchangeRunID FK "not null"
         int santaID FK "not null"
