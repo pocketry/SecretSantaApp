@@ -7,6 +7,7 @@ To seed your local database, run app/db/initdb.py
 To start the server
 `fastapi dev main.py`
 
+htmx and alpine.js in the front end
 
 #### Schema Diagram
 

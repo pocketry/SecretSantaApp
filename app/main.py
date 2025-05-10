@@ -1,13 +1,13 @@
 from typing import Annotated
 
-from fastapi import FastAPI, Request, Depends, Query
+from fastapi import FastAPI, Request, Depends, Form
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, SQLModel, create_engine, select
 
 from app.santaRepository import santaRepository
-from app.models import *
+from . import models
 
 sqlite_file_name = "santas.db"
 sqlite_url = f"sqlite:///./db/{sqlite_file_name}"
@@ -38,12 +38,25 @@ def home(request: Request):
 
 @app.get("/exchanges", response_class=HTMLResponse)
 def get_exchanges(
-    request: Request,
-    session: SessionDep,
-    ) -> list[Exchange]:
-    exchanges = session.exec(select(Exchange)).all()
+        request: Request,
+        session: SessionDep,
+        ) -> list[models.Exchange]:
+    exchanges = session.exec(select(models.Exchange)).all()
     return templates.TemplateResponse(
         request=request, name="exchanges.html", context={"exchangeList": exchanges}
+    )
+
+@app.post("/exchanges", response_class=HTMLResponse)
+def create_exchange(
+        request: Request, 
+        session: SessionDep, 
+        exchangeName: Annotated[str, Form()]):
+    exchange = models.Exchange(name=exchangeName)
+    session.add(exchange)
+    session.commit()
+    session.refresh(exchange)
+    return templates.TemplateResponse(
+        request=request, name="exchange.html", context={"name": exchange.name}
     )
 
 @app.get("/santalist/{exchange}", response_class=HTMLResponse)

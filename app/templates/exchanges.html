@@ -1,11 +1,28 @@
 {% extends "index.html" %}
 {% block main %}
 <section class="list-section">
-    <div class="list-header">Exchanges</div>
-    <ul class="item-list">
-      {% for s in exchangeList %}
-      <li>{{ s.name }}</li>
-      {% endfor %}
-    </ul>
-  </section>
-  {% endblock main %}
+  <div class="list-header">Exchanges</div>
+  <ul class="item-list">
+    {% for s in exchangeList %}
+    <li>{{ s.name }}</li>
+    {% endfor %}
+  </ul>
+</section>
+<section class="list-section">
+  <form aria-label="Create Exchange">
+    <input 
+      type="text" 
+      id="exchangeName" 
+      name="exchangeName"
+      required 
+      placeholder="Exchange Name" 
+    />
+    <input 
+      type="submit" 
+      value="Create" 
+      hx-post="/exchanges"
+      hx-target="ul"
+      hx-swap="beforeend"/>
+  </form>
+</section>
+{% endblock main %}

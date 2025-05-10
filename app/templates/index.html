@@ -5,14 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Secret Santa</title>
   <link rel="stylesheet" href={{ url_for('static', path='/styles.css') }} />
+  <script src={{ url_for('static', path='/htmx.min.js') }}></script>
 </head>
 <body>
   <header class="title-bar">
     <h1>Secret Santas</h1>
   </header>
-
   <main>
-    {% block main %}{% endblock %}
+    {% block main %}
+    <p><a href="{{ url_for('get_exchanges') }}">Exchanges</a></p>
+    {% endblock %}
   </main>
 </body>
 </html>
