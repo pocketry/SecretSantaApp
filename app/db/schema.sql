@@ -1,14 +1,14 @@
 -- Enable foreign key enforcement (required in SQLite)
 PRAGMA foreign_keys = ON;
 
--- Table: EXCHANGES
-CREATE TABLE exchanges (
+-- Table: EXCHANGE
+CREATE TABLE exchange (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL
 );
 
--- Table: SANTAS
-CREATE TABLE santas (
+-- Table: SANTA
+CREATE TABLE santa (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
@@ -25,8 +25,8 @@ CREATE TABLE santa_exchange_participation (
     FOREIGN KEY (santaID) REFERENCES santa(id)
 );
 
--- Table: SANTARESTRICTIONS
-CREATE TABLE santa_restrictions (
+-- Table: SANTARESTRICTION
+CREATE TABLE santa_restriction (
     id INTEGER PRIMARY KEY,
     santa1ID INTEGER NOT NULL,
     santa2ID INTEGER NOT NULL,
@@ -36,16 +36,16 @@ CREATE TABLE santa_restrictions (
     FOREIGN KEY (santa2ID) REFERENCES santa(id)
 );
 
--- Table: EXCHANGERUNS
-CREATE TABLE exchange_runs (
+-- Table: EXCHANGERUN
+CREATE TABLE exchange_run (
     id INTEGER PRIMARY KEY,
     exchangeID INTEGER NOT NULL,
     createdAt TEXT NOT NULL, -- use ISO 8601 string format for datetime
     FOREIGN KEY (exchangeID) REFERENCES exchange(id)
 );
 
--- Table: EXCHANGEASSIGNMENTS
-CREATE TABLE exchange_assignments (
+-- Table: EXCHANGEASSIGNMENT
+CREATE TABLE exchange_assignment (
     id INTEGER PRIMARY KEY,
     exchangeRunID INTEGER NOT NULL,
     santaID INTEGER NOT NULL,

@@ -4,7 +4,8 @@
   <div class="list-header">Exchanges</div>
   <ul class="item-list">
     {% for s in exchangeList %}
-    <li>{{ s.name }}</li>
+    <!-- <li hx-get="/exchanges/{{ s.id }}" hx-boost="true"><a href="{{ url}}">{{ s.name }}</a></li> -->
+    <li><a href="{{ url_for('get_santas', exchangeID=s.id) }}">{{ s.name }}</a></li>
     {% endfor %}
   </ul>
 </section>
@@ -21,8 +22,11 @@
       type="submit" 
       value="Create" 
       hx-post="/exchanges"
-      hx-target="ul"
-      hx-swap="beforeend"/>
+    />
   </form>
 </section>
 {% endblock main %}
+
+
+      <!-- hx-target="ul" -->
+      <!-- hx-swap="beforeend" -->

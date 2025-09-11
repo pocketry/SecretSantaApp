@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import FastAPI, Request, Depends, Form
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, SQLModel, create_engine, select
@@ -10,7 +10,7 @@ from app.santaRepository import santaRepository
 from . import models
 
 sqlite_file_name = "santas.db"
-sqlite_url = f"sqlite:///./db/{sqlite_file_name}"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
 
 connect_args = {"check_same_thread": False}
 engine = create_engine(sqlite_url, connect_args=connect_args)
@@ -32,21 +32,22 @@ templates = Jinja2Templates(directory="./templates")
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return templates.TemplateResponse(
-        request=request, name="index.html"
-    )
+    return RedirectResponse(url="/exchanges")
+    # return templates.TemplateResponse(
+    #     request=request, name="index.html"
+    # )
 
 @app.get("/exchanges", response_class=HTMLResponse)
 def get_exchanges(
         request: Request,
         session: SessionDep,
-        ) -> list[models.Exchange]:
+        ):
     exchanges = session.exec(select(models.Exchange)).all()
     return templates.TemplateResponse(
         request=request, name="exchanges.html", context={"exchangeList": exchanges}
     )
 
-@app.post("/exchanges", response_class=HTMLResponse)
+@app.post("/exchanges")
 def create_exchange(
         request: Request, 
         session: SessionDep, 
@@ -55,13 +56,14 @@ def create_exchange(
     session.add(exchange)
     session.commit()
     session.refresh(exchange)
+    headers = {"HX-Redirect": f"/exchanges/{exchange.id}"}
+    return Response(status_code=201, headers=headers)
+
+@app.get("/exchanges/{exchangeID}", response_class=HTMLResponse)
+def get_santas(request: Request, session: SessionDep, exchangeID: int):
+    exchange = session.exec(select(models.Exchange).where(models.Exchange.id == exchangeID)).first()
+    # TODO: need to handle empty result
+    # santaList = exchange.first().santaParticipants
     return templates.TemplateResponse(
         request=request, name="exchange.html", context={"name": exchange.name}
-    )
-
-@app.get("/santalist/{exchange}", response_class=HTMLResponse)
-def get_santas(request: Request, exchange: str):
-    santaList = santaRepository(exchange).getSantas(exchange)
-    return templates.TemplateResponse(
-        request=request, name="santas.html", context={"santaList": santaList}
     )
