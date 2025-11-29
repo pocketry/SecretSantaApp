@@ -1,4 +1,7 @@
 import csv
+from datetime import date
+
+currentYear = date.today().strftime('%Y')
 
 class Santa:
 
@@ -61,7 +64,7 @@ class Santa:
         with open('./santaConfigs/santaWishList.csv', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                if row['name'] == self.gifteeName:
+                if row['name'] == self.gifteeName and row['year'] == currentYear:
                     self.gifteeWishList = row['wishList']
 
     def getGifteeWishList(self):
